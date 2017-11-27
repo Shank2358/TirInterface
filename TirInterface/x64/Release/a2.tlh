@@ -1,0 +1,108 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.11.25547.0 (a7eb044a).
+//
+// e:\visual studio 2017\target intelligent recognition\tirinterface\tirinterface\x64\release\a2.tlh
+//
+// C++ source equivalent of type library E:\\visual studio 2017\\Projects\\A2\\x64\\Release\\A2.dll
+// compiler-generated file created 11/27/17 at 09:28:10 - DO NOT EDIT!
+
+#pragma once
+#pragma pack(push, 8)
+
+#include <comdef.h>
+
+//
+// Forward references and typedefs
+//
+
+struct __declspec(uuid("77593fc5-9faf-4fa6-89a9-a47132030246"))
+/* LIBID */ __A2Lib;
+struct /* coclass */ CompReg;
+struct __declspec(uuid("a817e7a2-43fa-11d0-9e44-00aa00b6770a"))
+/* dual interface */ IComponentRegistrar;
+struct /* coclass */ TirBase;
+struct __declspec(uuid("185fbcc0-639c-4a4a-8a36-2bf7aa3ae086"))
+/* dual interface */ ITirBase;
+
+//
+// Smart pointer typedef declarations
+//
+
+_COM_SMARTPTR_TYPEDEF(IComponentRegistrar, __uuidof(IComponentRegistrar));
+_COM_SMARTPTR_TYPEDEF(ITirBase, __uuidof(ITirBase));
+
+//
+// Type library items
+//
+
+struct __declspec(uuid("a18bd6b4-06af-40a4-be9b-16d4860fa380"))
+CompReg;
+    // [ default ] interface IComponentRegistrar
+
+struct __declspec(uuid("a817e7a2-43fa-11d0-9e44-00aa00b6770a"))
+IComponentRegistrar : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    HRESULT Attach (
+        _bstr_t bstrPath );
+    HRESULT RegisterAll ( );
+    HRESULT UnregisterAll ( );
+    HRESULT GetComponents (
+        SAFEARRAY * * pbstrCLSIDs,
+        SAFEARRAY * * pbstrDescriptions );
+    HRESULT RegisterComponent (
+        _bstr_t bstrCLSID );
+    HRESULT UnregisterComponent (
+        _bstr_t bstrCLSID );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Attach (
+        /*[in]*/ BSTR bstrPath ) = 0;
+      virtual HRESULT __stdcall raw_RegisterAll ( ) = 0;
+      virtual HRESULT __stdcall raw_UnregisterAll ( ) = 0;
+      virtual HRESULT __stdcall raw_GetComponents (
+        /*[out]*/ SAFEARRAY * * pbstrCLSIDs,
+        /*[out]*/ SAFEARRAY * * pbstrDescriptions ) = 0;
+      virtual HRESULT __stdcall raw_RegisterComponent (
+        /*[in]*/ BSTR bstrCLSID ) = 0;
+      virtual HRESULT __stdcall raw_UnregisterComponent (
+        /*[in]*/ BSTR bstrCLSID ) = 0;
+};
+
+struct __declspec(uuid("10357cde-ba5d-40d2-bee5-ef75d72d6e4e"))
+TirBase;
+    // [ default ] interface ITirBase
+
+struct __declspec(uuid("185fbcc0-639c-4a4a-8a36-2bf7aa3ae086"))
+ITirBase : IDispatch
+{
+    //
+    // Wrapper methods for error-handling
+    //
+
+    long Add (
+        long par1,
+        long par2 );
+
+    //
+    // Raw methods provided by interface
+    //
+
+      virtual HRESULT __stdcall raw_Add (
+        /*[in]*/ long par1,
+        /*[in]*/ long par2,
+        /*[out,retval]*/ long * result ) = 0;
+};
+
+//
+// Wrapper method implementations
+//
+
+#include "e:\visual studio 2017\target intelligent recognition\tirinterface\tirinterface\x64\release\a2.tli"
+
+#pragma pack(pop)

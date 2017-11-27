@@ -1,0 +1,59 @@
+﻿// Created by Microsoft (R) C/C++ Compiler Version 14.11.25547.0 (a7eb044a).
+//
+// e:\visual studio 2017\target intelligent recognition\tirinterface\tirinterface\x64\release\a2.tli
+//
+// Wrapper implementations for type library E:\\visual studio 2017\\Projects\\A2\\x64\\Release\\A2.dll
+// compiler-generated file created 11/27/17 at 09:28:10 - DO NOT EDIT!
+
+#pragma once
+
+//
+// interface IComponentRegistrar wrapper method implementations
+//
+
+inline HRESULT IComponentRegistrar::Attach ( _bstr_t bstrPath ) {
+    HRESULT _hr = raw_Attach(bstrPath);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IComponentRegistrar::RegisterAll ( ) {
+    HRESULT _hr = raw_RegisterAll();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IComponentRegistrar::UnregisterAll ( ) {
+    HRESULT _hr = raw_UnregisterAll();
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IComponentRegistrar::GetComponents ( SAFEARRAY * * pbstrCLSIDs, SAFEARRAY * * pbstrDescriptions ) {
+    HRESULT _hr = raw_GetComponents(pbstrCLSIDs, pbstrDescriptions);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IComponentRegistrar::RegisterComponent ( _bstr_t bstrCLSID ) {
+    HRESULT _hr = raw_RegisterComponent(bstrCLSID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+inline HRESULT IComponentRegistrar::UnregisterComponent ( _bstr_t bstrCLSID ) {
+    HRESULT _hr = raw_UnregisterComponent(bstrCLSID);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _hr;
+}
+
+//
+// interface ITirBase wrapper method implementations
+//
+
+inline long ITirBase::Add ( long par1, long par2 ) {
+    long _result = 0;
+    HRESULT _hr = raw_Add(par1, par2, &_result);
+    if (FAILED(_hr)) _com_issue_errorex(_hr, this, __uuidof(this));
+    return _result;
+}
