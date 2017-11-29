@@ -3,26 +3,22 @@
 
 TirParVector::TirParVector()
 {
+	cout << "TirParVector constructor called." << endl;
 }
 
 TirParVector::~TirParVector()
 {
+	cout << "TirParVector destructor called." << endl;
 }
 
 double * TirParVector::GetVector()
 {
-	doc = LoadConfig();//load
 	root = doc.RootElement();  //root
 	child = root->FirstChildElement();
-	int num;//元素序号
-	string v;//数据类型
-	int flag;//判断标志	
-	flag = 0;//未找到数据类型
+	int flag = 0;
 	for (; child != NULL; child = child->NextSiblingElement())
 	{
-		v = child->Value();//child
-						   //cout << v << endl;
-		while (v == "TirParVector")//判断类型
+		while (child->Value() == type)//判断类型
 		{
 			flag = 1;//找到数据类型，但未找到名为name的数据
 			key = child->FirstChildElement();
@@ -35,36 +31,46 @@ double * TirParVector::GetVector()
 					len = atoi(k1->GetText());
 					//cout << len << endl;
 					TiXmlElement *k2 = k1->NextSiblingElement();//value
-					string text(k2->GetText());//数据，cfg字符串
-											   //cout << text << endl;
+					string text(k2->GetText());//value，cfg字符串
 					for (int i = 0; i < len; i++)
 					{
 						if (text[i] == ',' || text[i] == ';')
 						{
-							text[i] = ' ';
-							//逗号或分号形式分隔元素转换为空格形式分隔元素
+							text[i] = ' ';//逗号或分号形式分隔元素转换为空格形式分隔元素
 						}
 					}					
 					stringstream ss(text);//分解字符串
 					vector<double> arr;//存储分解完的字符串
-					double temp;
-					num = 0;
+					double temp = 0;
+					int num = 0;
 					while (ss >> temp)
 					{
 						arr.push_back(temp);//压栈
 						num++;//元素个数=压栈次数
 					}
-					vec = new double[num];//new parseq
+					vec = new double[num];
+					cout << name << "[" << len << "] = ";
 					for (int i = 0; i < num; i++)
 					{
 						vec[i] = arr.at(i);
+
 						cout << vec[i] << " ";
 					}
 					cout << endl;
 					arr.clear();
 					break;
 				}
+				if (key == NULL)
+				{
+					key = child->FirstChildElement();
+					break;
+				}
 			}
+			break;
+		}
+		if (child == NULL)
+		{
+			child = root->FirstChildElement();
 			break;
 		}
 	}
@@ -72,7 +78,7 @@ double * TirParVector::GetVector()
 		cout << "Couldn't find the data type: TirParVector." << endl;
 	else if (flag == 1)
 		cout << "Couldn't find the data : " << name << endl;
-	return vec;//返回double * vec
+	return vec;
 }
 
 double TirParVector::GetElement(int n)
@@ -82,7 +88,7 @@ double TirParVector::GetElement(int n)
 	{
 		element = vec[i];
 	}
-	cout << element << endl;
+	cout << name << "("<<n<<") = " << element << endl;
 	return element;
 }
 
@@ -92,24 +98,18 @@ int TirParVector::SetVector(double * vec, int i_len)
 	stringstream ss;
 	ss << i_len;
 	string s_len = ss.str();
-	ss.str("");//清除缓冲
-			   //cout << s_len << endl;
-
-			   //向量元素值转换为string s_value
+	ss.str("");//清除缓存
+	//向量元素值转换为string s_value
 	string s_value;
 	for (int i = 0; i < i_len; i++)
 	{
 		ss << *vec;
 		string temp = ss.str();
-		ss.str("");//清除缓冲
-				   //cout << temp << endl;
+		ss.str("");//清除缓存
 		s_value = s_value + temp + " ";
 		vec++;
 	}
-	//cout << s_value << endl;
-
-	doc = LoadConfig();//load
-	root = doc.RootElement();  //root
+	root = doc.RootElement();
 	child = root->FirstChildElement();
 	string v;//数据类型
 	int flag;//判断标志	
@@ -142,16 +142,24 @@ int TirParVector::SetVector(double * vec, int i_len)
 					TiXmlText *text_k2new = new TiXmlText(k2strc);//k2节点的value值为s_value.c_str()
 					k1new->LinkEndChild(text_k1new);//连接text节点至k1new节点
 					k2new->LinkEndChild(text_k2new);//连接text节点k2new节点
-					cout << k1new->GetText() << endl;
-					cout << k2new->GetText() << endl;
+					//cout << k1new->GetText() << endl;
+					//cout << k2new->GetText() << endl;
 					break;
 				}
-				break;
+				if (key == NULL)
+				{
+					key = child->FirstChildElement();
+					break;
+				}
 			}
 			break;
 		}
+		if (child == NULL)
+		{
+			child = root->FirstChildElement();
+			break;
+		}
 	}
-	//doc.SaveFile();
 	if (flag == 0)
 	{
 		cout << "Couldn't find the data type: TirParString." << endl;
@@ -164,7 +172,7 @@ int TirParVector::SetVector(double * vec, int i_len)
 	}
 	else if (flag == 2)
 	{
-		cout << "Set " << name << "[" << s_len << "]" << "=" << s_value << " successfully." << endl;
+		cout << "Set " << name << "[" << s_len << "]" << " = " << s_value << " successfully." << endl;
 		return 1;
 	}
 	else
@@ -179,10 +187,17 @@ int TirParVector::SetElement(int n, double v)
 		vec[i] = v;
 	}
 	SetVector(vec, len);
+	cout<< "Set " << name << "(" << n << ")" << " = " << v << " successfully." << endl;
 	return 0;
 }
 
 TirParVector TirParVector::Copy()
 {
-	return TirParVector();
+	TirParVector v;
+	v.name = name;
+	v.type = type;
+	v.len = len;
+	v.vec = vec;
+	cout << "Copy OK!" << endl;
+	return v;
 }

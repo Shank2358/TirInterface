@@ -3,51 +3,45 @@
 
 TirParMatrix::TirParMatrix()
 {
+	cout << "TirParMatrix constructor called." << endl;
 }
 
 TirParMatrix::~TirParMatrix()
 {
+	cout << "TirParMatrix destructor called." << endl;
 }
 
 double ** TirParMatrix::GetMatrix()
 {
-	doc = LoadConfig();//load
 	root = doc.RootElement();  //root  
 	child = root->FirstChildElement();
 	string r;//rows (string)
 	string c;//cols (string)
-	string v;//数据类型
 	int flag;//判断标志	
 	flag = 0;//未找到数据类型
 	for (; child != NULL; child = child->NextSiblingElement())
 	{
-		v = child->Value();//child
-						   //cout << v << endl;
-		while (v == "TirParMatrix")//判断类型
+		while (child->Value() == type)//判断类型
 		{
 			flag = 1;//找到数据类型，但未找到名为name的数据
 			key = child->FirstChildElement();
 			for (; key != NULL; key = key->NextSiblingElement())
 			{
-				while (key->Value() == this->name)
+				while (key->Value() == name)
 				{
 					flag = 2;//找到名为name的数据
 					TiXmlElement *k1 = key->FirstChildElement();//rows
 					r = k1->GetText();
-					rows = stoi(r);
-					//cout << rows << endl;			
+					rows = stoi(r);			
 					TiXmlElement *k2 = k1->NextSiblingElement();//cols
 					c = k2->GetText();
 					cols = stoi(c);
-					//cout << cols << endl;
 					TiXmlElement *k3 = k2->NextSiblingElement();//value
 					string text(k3->GetText());//数据，xml字符串
-											   //cout << text << endl;
 					for (int i = 0; i < text.length(); i++)
 					{
 						if (text[i] == ',' || text[i] == ';')
-							text[i] = ' ';
-						//逗号或分号形式分隔元素转换为空格形式分隔元素
+							text[i] = ' ';//逗号或分号形式分隔元素转换为空格形式分隔元素
 					}
 					matrix = new double *[rows];//new matrix
 					stringstream ss(text);//分解字符串
@@ -63,10 +57,10 @@ double ** TirParMatrix::GetMatrix()
 						{
 							a[j] = arr.at(f);
 							f = f + 1;
-							//cout << a[j] << endl;
 						}
 						matrix[i] = a;
 					}
+					cout << name << "[" << rows << "][" << cols << "] = " << endl;
 					for (int i = 0; i < rows; i++)
 					{
 						for (int j = 0; j < cols; j++)
@@ -75,10 +69,20 @@ double ** TirParMatrix::GetMatrix()
 						}
 						cout << endl;
 					}
-					arr.clear();//clear vector容器
+					arr.clear();
+					break;
+				}
+				if (key == NULL)
+				{
+					key = child->FirstChildElement();
 					break;
 				}
 			}
+			break;
+		}
+		if (child == NULL)
+		{
+			child = root->FirstChildElement();
 			break;
 		}
 	}
@@ -86,7 +90,7 @@ double ** TirParMatrix::GetMatrix()
 		cout << "Couldn't find the data type: TirParMatrix." << endl;
 	else if (flag == 1)
 		cout << "Couldn't find the data : " << name << endl;
-	return matrix;//返回double ** matrix
+	return matrix;
 }
 
 double TirParMatrix::GetElement(int x, int y)
@@ -99,7 +103,7 @@ double TirParMatrix::GetElement(int x, int y)
 			element = matrix[i][j];
 		}
 	}
-	cout << element << endl;
+	cout << name << "(" << x << "," << y << ") = " << element << endl;
 	return element;
 }
 
@@ -131,9 +135,6 @@ int TirParMatrix::SetMatrix(double ** matrix, int i_rows, int i_cols)
 			s_value = s_value + temp + " ";
 		}
 	}
-	//cout << s_value << endl;
-
-	doc = LoadConfig();//load
 	TiXmlElement* root = doc.RootElement();//root
 	TiXmlElement* child = root->FirstChildElement();
 	string v;//数据类型
@@ -174,17 +175,22 @@ int TirParMatrix::SetMatrix(double ** matrix, int i_rows, int i_cols)
 					k1new->LinkEndChild(text_k1new);//连接text节点
 					k2new->LinkEndChild(text_k2new);//连接text节点
 					k3new->LinkEndChild(text_k3new);//连接text节点
-					cout << k1new->GetText() << endl;
-					cout << k2new->GetText() << endl;
-					cout << k3new->GetText() << endl;
 					break;
 				}
-				break;
+				if (key == NULL)
+				{
+					key = child->FirstChildElement();
+					break;
+				}
 			}
 			break;
 		}
+		if (child == NULL)
+		{
+			child = root->FirstChildElement();
+			break;
+		}
 	}
-	//doc.SaveFile();
 	if (flag == 0)
 	{
 		cout << "Couldn't find the data type: TirParString." << endl;
@@ -216,11 +222,18 @@ int TirParMatrix::SetElement(int x, int y, double v)
 		}
 	}
 	SetMatrix(matrix, rows, cols);
-	//SaveConfig();
+	cout << "Set " << name << "(" << x << "," << y << ") = " << v << " successfully." << endl;
 	return 0;
 }
 
 TirParMatrix TirParMatrix::Copy()
 {
-	return TirParMatrix();
+	TirParMatrix m;
+	m.name = name;
+	m.type = type;
+	m.rows = rows;
+	m.cols =cols;
+	m.matrix = matrix;
+	cout << "Copy OK!" << endl;
+	return m;
 }

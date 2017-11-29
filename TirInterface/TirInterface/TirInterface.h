@@ -1,9 +1,10 @@
 #pragma once
 #ifndef _TIRINTERFACE_H_
 #define _TIRINTERFACE_H_
-
+#import "E:\\visual studio 2017\\Projects\\A3\\x64\\Release\\A3.dll" no_namespace 
 #include"tinyxml.h"
 #include"stdlib.h"
+#include "atlcomcli.h"  
 #include<stdio.h>
 #include<iostream>
 #include<sstream>
@@ -90,7 +91,8 @@ public:
 	~TirParString();
 	string GetString();
 	int SetString(string str);
-	char * StrCopy(char *strDest, const char *strSrc);
+	TirParString Copy();
+	//char * StrCopy(char *strDest, const char *strSrc);
 };
 
 class TirStringPath : public TirParString
@@ -109,7 +111,6 @@ public:
 	string GetPathNix();
 	string GetFileName();
 	string GetFileExt();
-private:
 	int IsLegal();
 	int IsExist();
 };
@@ -120,12 +121,16 @@ class TirProcessor : public TirStringPath
 protected:
 	Mat** img_in;
 	Mat** img_out;
+	string procname;
+	vector<TirBase*> pv;
+	vector<TirProcessor*> procvec;
+	//map<string, vector<TirBase*>> procvec;
 	//Methods
 public:
 	TirProcessor();
 	~TirProcessor();
-	TirBase GetParaByName(string name);
-	int SetParaByName(string name, TirBase b);
+	TirBase* GetParaByName(string name);
+	int SetParaByName(string name, TirBase* b);
 	virtual void Process(Mat** img_in, Mat** img_out);
 };
 
@@ -133,7 +138,6 @@ class TirAlgorithm : public TirProcessor
 {
 	//Data
 protected:
-	string procname;
 	TirProcessor** proc;//£¿
 	int num;
 private:
@@ -144,7 +148,7 @@ public:
 	~TirAlgorithm();
 	void Loadproc(string path);
 	void Unloadproc();
-	TirBase GetPara(string procname, string paraname);
+	TirBase* GetPara(string procname, string paraname);
 	int SetPara(string procname, string paraname, TirBase* b);
 	TirProcessor** GetProcByName(string procname);
 	int SetProcByName(string procname, TirProcessor** proc);

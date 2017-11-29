@@ -157,7 +157,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="test_TirAlgorithm.cpp" />
     <ClCompile Include="test_TirBase.cpp" />
+    <ClCompile Include="test_TirParMatrix.cpp" />
+    <ClCompile Include="test_TirParString.cpp" />
+    <ClCompile Include="test_TirParVector.cpp" />
+    <ClCompile Include="test_TirProcessor.cpp" />
+    <ClCompile Include="test_TirStringPath.cpp" />
     <ClCompile Include="tinystr.cpp" />
     <ClCompile Include="tinyxml.cpp" />
     <ClCompile Include="tinyxmlerror.cpp" />

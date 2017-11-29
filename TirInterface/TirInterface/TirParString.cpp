@@ -3,25 +3,22 @@
 
 TirParString::TirParString()
 {
+	cout << "TirParString constructor called." << endl;
 }
 
 TirParString::~TirParString()
 {
+	cout << "TirParString destructor called." << endl;
 }
 
 string TirParString::GetString()
 {
-	doc = LoadConfig();//load
-	root = doc.RootElement();  //root
+	root = doc.RootElement(); 
 	child = root->FirstChildElement();
-	string v;//数据类型
-	int flag;//判断标志	
-	flag = 0;//未找到数据类型
+	int flag = 0;//未找到数据类型
 	for (; child != NULL; child = child->NextSiblingElement())
 	{
-		v = child->Value();//child
-						   //cout << v << endl;
-		while (v == "TirParString")//判断类型
+		while (child->Value() == type)//判断类型
 		{
 			flag = 1;//找到数据类型，但未找到名为name的数据
 			key = child->FirstChildElement();
@@ -31,10 +28,15 @@ string TirParString::GetString()
 				{
 					flag = 2;//找到名为name的数据
 					str = key->GetText();
-					cout << str << endl;
+					cout << name << " = " << str << endl;
 					break;
 				}
 			}
+			break;
+		}
+		if (child == NULL)
+		{
+			child = root->FirstChildElement();
 			break;
 		}
 	}
@@ -42,22 +44,17 @@ string TirParString::GetString()
 		cout << "Couldn't find the data type: TirParString." << endl;
 	else if (flag == 1)
 		cout << "Couldn't find the data : " << name << endl;
-	return str;//返回string str
+	return str;
 }
 
 int TirParString::SetString(string str)
 {
-	doc = LoadConfig();//load
-	root = doc.RootElement();  //root
+	root = doc.RootElement();
 	child = root->FirstChildElement();
-	string v;//数据类型
-	int flag;//判断标志	
-	flag = 0;//未找到数据类型
+	int flag = 0;//未找到数据类型
 	for (; child != NULL; child = child->NextSiblingElement())
 	{
-		v = child->Value();//child
-						   //cout << v << endl;
-		while (v == "TirParString")//判断类型
+		while (child->Value() == type)//判断类型
 		{
 			flag = 1;//找到数据类型，但未找到名为name的数据
 			key = child->FirstChildElement();
@@ -66,7 +63,6 @@ int TirParString::SetString(string str)
 				while (key->Value() == name)
 				{
 					flag = 2;//找到名为name的数据	
-							 //Set修改节点值：先删除原节点再新增修改后节点
 					child->RemoveChild(key); //删除节点
 					const char* nc = name.c_str();
 					const char* strc = str.c_str();
@@ -74,15 +70,22 @@ int TirParString::SetString(string str)
 					child->LinkEndChild(keynew);
 					TiXmlText *textnew = new TiXmlText(strc);
 					keynew->LinkEndChild(textnew);
-					cout << keynew->GetText() << endl;
 					break;
 				}
-				break;
+				if (key == NULL)
+				{
+					key = child->FirstChildElement();
+					break;
+				}
 			}
 			break;
 		}
+		if (child == NULL)
+		{
+			child = root->FirstChildElement();
+			break;
+		}
 	}
-	//doc.SaveFile();
 	if (flag == 0)
 	{
 		cout << "Couldn't find the data type: TirParString." << endl;
@@ -102,6 +105,17 @@ int TirParString::SetString(string str)
 		return 0;
 }
 
+TirParString TirParString::Copy()
+{
+	TirParString s;
+	s.name = name;
+	s.type = type;
+	s.str = str;
+	cout << "Copy OK!" << endl;
+	return s;
+}
+
+/*
 char * TirParString::StrCopy(char * strDest, const char * strSrc)
 {
 	assert((strDest != NULL) && (strSrc != NULL)); //判断指针是否合法,即分配内存,指向某块确定区域  
@@ -110,3 +124,4 @@ char * TirParString::StrCopy(char * strDest, const char * strSrc)
 		NULL;                   // *strDest = '\0'; -->即加一个结束符.因为字符串结束已拷贝了.  
 	return address;      //返回目标首地址的值。    
 }
+*/
